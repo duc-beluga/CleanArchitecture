@@ -1,8 +1,5 @@
-using CleanArchitecture.Application.Services;
-using CleanArchitecture.Domain.Interface;
-using CleanArchitecture.Infrastructure.Data;
-using CleanArchitecture.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+using CleanArchitecture.Application;
+using CleanArchitecture.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<BlogDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnectionString") ?? 
-    throw new InvalidOperationException("'BlogDbConnectionString' not found"))
-);
-
-builder.Services.AddTransient<IBlogRepository, BlogRepository>();
-builder.Services.AddTransient<IBlogService, BlogService>();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
