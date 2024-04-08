@@ -14,7 +14,7 @@ namespace CleanArchitecture.Application
         {
             services.AddMediatR(configuration =>
             {
-                configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly)
+                configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             });
             services.AddScoped<IBlogService, BlogService>();
             return services;
