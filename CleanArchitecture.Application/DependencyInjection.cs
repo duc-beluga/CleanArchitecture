@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +15,6 @@ namespace CleanArchitecture.Application
             {
                 configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             });
-            services.AddScoped<IBlogService, BlogService>();
             return services;
         }
     }

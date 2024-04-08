@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.GetBlogs
+namespace CleanArchitecture.Application.Blog.Queries.GetBlogById
 {
-    public class GetBlogsQuery : IRequest<List<Blog>>
+    public class GetBlogByIdQuery : IRequest<BlogEntity>
     {
+        public int Id { get; set; }
     }
 }

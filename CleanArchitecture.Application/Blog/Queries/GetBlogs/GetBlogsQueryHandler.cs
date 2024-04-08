@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.GetBlogs
+namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
 {
-    public class GetBlogsQueryHandler : IRequestHandler<GetBlogsQuery, List<Blog>>
+    public class GetBlogsQueryHandler : IRequestHandler<GetBlogsQuery, List<BlogEntity>>
     {
         private readonly IBlogRepository _blogRepository;
 
@@ -18,7 +18,7 @@ namespace CleanArchitecture.Application.GetBlogs
             _blogRepository = blogRepository;
         }
 
-        public async Task<List<Blog>> Handle(GetBlogsQuery request, CancellationToken cancellationToken)
+        public async Task<List<BlogEntity>> Handle(GetBlogsQuery request, CancellationToken cancellationToken)
         {
             var blogs = await _blogRepository.GetAllSync();
             return blogs;

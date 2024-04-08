@@ -2,6 +2,7 @@
 using CleanArchitecture.Domain.Interface;
 using CleanArchitecture.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace CleanArchitecture.Infrastructure.Repositories
         {
             _blogDbContext = blogDbContext;
         }
-        public async Task<Blog> CreateAsync(Blog blog)
+        public async Task<BlogEntity> CreateAsync(BlogEntity blog)
         {
             await _blogDbContext.Blogs.AddAsync(blog);
             await _blogDbContext.SaveChangesAsync();
@@ -30,24 +31,30 @@ namespace CleanArchitecture.Infrastructure.Repositories
             return await _blogDbContext.Blogs.Where(blog => blog.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task<List<Blog>> GetAllSync()
+        public async Task<List<BlogEntity>> GetAllSync()
         {
             return await _blogDbContext.Blogs.ToListAsync();
         }
 
-        public async Task<Blog> GetByIdSync(int id)
+        public async Task<BlogEntity?> GetByIdSync(int id)
         {
-            return await _blogDbContext.Blogs.AsNoTracking().FirstOrDefaultAsync(blog => blog.Id == id);
+            var article = await _blogDbContext.Blogs.FindAsync(id);
+            return article;
         }
 
-        public async Task<int> UpdateAsync(int id, Blog blog)
+        public async Task<BlogEntity?> UpdateAsync(int id, BlogEntity blog)
         {
-            return await _blogDbContext.Blogs.Where(b => b.Id == id).ExecuteUpdateAsync(setters => setters
-            .SetProperty(b => b.Id, blog.Id)
-            .SetProperty(b => b.Name, blog.Name)
-            .SetProperty(b => b.Description, blog.Description)
-            .SetProperty(b => b.Author, blog.Author)
-            .SetProperty(b => b.ImageUrl, blog.ImageUrl));
+            var selectedBlog = await GetByIdSync(id);
+            if (selectedBlog is null)
+                return null;
+            selectedBlog.Author = blog.Author;
+            selectedBlog.Description = blog.Description;
+            selectedBlog.Name = blog.Name;
+            selectedBlog.ImageUrl = blog.ImageUrl;
+
+            await _blogDbContext.SaveChangesAsync();
+
+            return selectedBlog;
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using CleanArchitecture.Application.GetBlogs;
-using CleanArchitecture.Application.Services;
-using CleanArchitecture.Domain.Entities;
+﻿using CleanArchitecture.Application.Blog.Commands.CreateBlog;
+using CleanArchitecture.Application.Blog.Commands.UpdateBlog;
+using CleanArchitecture.Application.Blog.Queries.GetBlogById;
+using CleanArchitecture.Application.Blog.Queries.GetBlogs;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,48 +12,42 @@ namespace CleanArchitecture.API.Controllers
     [ApiController]
     public class BlogController : ControllerBase
     {
-        private readonly IBlogService _blogService;
-        private readonly IMediator _mediator;
-        public BlogController(IBlogService blogService, IMediator mediator)
+        private readonly ISender _mediator;
+        public BlogController(IMediator mediator)
         {
-            _blogService = blogService;
             _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetBlogs()
         {
             var blogs = await _mediator.Send(new GetBlogsQuery());
             return Ok(blogs);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{blogId}")]
+        public async Task<IActionResult> GetBlogById(int blogId)
         {
-            var blog = await _blogService.GetByIdSync(id);
-            if (blog == null)
-            {
-                return NotFound();
-            }
+            var blog = await _mediator.Send(new GetBlogByIdQuery() { Id = blogId });
             return Ok(blog);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Blog blog)
+        public async Task<IActionResult> CreateBlog(CreateBlogCommand createBlogCommand)
         {
-            var createdBlog = await _blogService.CreateAsync(blog);
-            return CreatedAtAction(nameof(GetById), new { id = createdBlog.Id }, createdBlog);
+            var createdBlog = await _mediator.Send(createBlogCommand);
+            return CreatedAtAction(nameof(GetBlogById), new { id = createdBlog.Id }, createdBlog);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Blog updatedBlog)
+        [HttpPut("{blogId}")]
+        public async Task<IActionResult> UpdateBlog(int blogId, UpdateBlogCommand updateBlogCommand)
         {
-            int existingBlog = await _blogService.UpdateAsync(id, updatedBlog);
-            if (existingBlog == 0)
+            if (blogId != updateBlogCommand.Id)
             {
                 return BadRequest();
             }
-            return NoContent();
+            var updatedBlog = await _mediator.Send(updateBlogCommand);
+            return Ok(updatedBlog);
         }
     }
 }

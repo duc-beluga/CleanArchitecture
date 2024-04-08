@@ -1,12 +1,14 @@
-﻿using System;
+﻿using CleanArchitecture.Domain.Entities;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Domain.Entities
+namespace CleanArchitecture.Application.Blog.Commands.CreateBlog
 {
-    public class Blog
+    public class CreateBlogCommand : IRequest<BlogEntity>
     {
         public int Id { get; set; }
         public string Name { get; set; }
