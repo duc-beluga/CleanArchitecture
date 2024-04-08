@@ -12,6 +12,10 @@ namespace CleanArchitecture.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddMediatR(configuration =>
+            {
+                configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly)
+            });
             services.AddScoped<IBlogService, BlogService>();
             return services;
         }
