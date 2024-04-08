@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Application.Services;
+﻿using CleanArchitecture.Application.GetBlogs;
+using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,16 +12,17 @@ namespace CleanArchitecture.API.Controllers
     public class BlogController : ControllerBase
     {
         private readonly IBlogService _blogService;
-
-        public BlogController(IBlogService blogService)
+        private readonly IMediator _mediator;
+        public BlogController(IBlogService blogService, IMediator mediator)
         {
             _blogService = blogService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var blogs = await _blogService.GetAllSync();
+            var blogs = await _mediator.Send(new GetBlogsQuery());
             return Ok(blogs);
         }
 
