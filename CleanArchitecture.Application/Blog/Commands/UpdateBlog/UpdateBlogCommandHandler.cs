@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Domain.Entities;
+﻿using CleanArchitecture.Application.Blog.DTOs;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interface;
+using Mapster;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Commands.UpdateBlog
 {
-    public class UpdateBlogCommandHandler : IRequestHandler<UpdateBlogCommand, BlogEntity>
+    public class UpdateBlogCommandHandler : IRequestHandler<UpdateBlogCommand, UpdateBlogResponse>
     {
         private readonly IBlogRepository _blogRepository;
 
@@ -18,18 +20,11 @@ namespace CleanArchitecture.Application.Blog.Commands.UpdateBlog
             _blogRepository = blogRepository;
         }
 
-        public async Task<BlogEntity> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateBlogResponse> Handle(UpdateBlogCommand request, CancellationToken cancellationToken)
         {
-            var updatedBlog = new BlogEntity
-            {
-                Id = request.Id,
-                Author = request.Author,
-                Description = request.Description,
-                ImageUrl = request.ImageUrl,
-                Name = request.Name
-            };
+            var updatedBlog = request.Adapt<BlogEntity>();
             var blog = await _blogRepository.UpdateAsync(request.Id, updatedBlog);
-            return blog;
+            return blog.Adapt<UpdateBlogResponse>();
         }
     }
 }
