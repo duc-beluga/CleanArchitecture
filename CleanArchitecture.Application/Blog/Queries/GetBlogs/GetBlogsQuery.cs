@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
 {
-    public class GetBlogsQuery : IRequest<List<BlogGetResponse>>
+    public class GetBlogsQuery : IRequest<List<GetBlogResponse>>
     {
     }
 }

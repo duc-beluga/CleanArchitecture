@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.DTOs
 {
-    public record struct BlogGetResponse(int Id, string Name, string Description, string Author, string ImageUrl) { }
+    public record struct GetBlogResponse(int Id, string Name, string Description, string Author, string ImageUrl) { }
 }

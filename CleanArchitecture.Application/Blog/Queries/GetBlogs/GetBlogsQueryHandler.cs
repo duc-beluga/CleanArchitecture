@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
 {
-    public class GetBlogsQueryHandler : IRequestHandler<GetBlogsQuery, List<BlogGetResponse>>
+    public class GetBlogsQueryHandler : IRequestHandler<GetBlogsQuery, List<GetBlogResponse>>
     {
         private readonly IBlogRepository _blogRepository;
 
@@ -20,10 +20,10 @@ namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
             _blogRepository = blogRepository;
         }
 
-        public async Task<List<BlogGetResponse>> Handle(GetBlogsQuery request, CancellationToken cancellationToken)
+        public async Task<List<GetBlogResponse>> Handle(GetBlogsQuery request, CancellationToken cancellationToken)
         {
             var blogs = await _blogRepository.GetAllSync();
-            return blogs.Adapt<List<BlogGetResponse>>();
+            return blogs.Adapt<List<GetBlogResponse>>();
         }
     }
 }

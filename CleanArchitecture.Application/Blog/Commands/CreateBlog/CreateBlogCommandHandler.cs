@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Domain.Entities;
+﻿using CleanArchitecture.Application.Blog.DTOs;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interface;
+using Mapster;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Commands.CreateBlog
 {
-    public class CreateBlogCommandHandler : IRequestHandler<CreateBlogCommand, BlogEntity>
+    public class CreateBlogCommandHandler : IRequestHandler<CreateBlogCommand, CreateBlogResponse>
     {
         private readonly IBlogRepository _blogRepository;
 
@@ -18,18 +20,11 @@ namespace CleanArchitecture.Application.Blog.Commands.CreateBlog
             _blogRepository = blogRepository;
         }
 
-        public async Task<BlogEntity> Handle(CreateBlogCommand request, CancellationToken cancellationToken)
+        public async Task<CreateBlogResponse> Handle(CreateBlogCommand request, CancellationToken cancellationToken)
         {
-            var newBlog = new BlogEntity
-            {
-                Id = request.Id,
-                Name = request.Name,
-                Description = request.Description,
-                Author = request.Author,
-                ImageUrl = request.ImageUrl
-            };
+            var newBlog = request.Adapt<BlogEntity>();
             var blog = await _blogRepository.CreateAsync(newBlog);
-            return blog;
+            return blog.Adapt<CreateBlogResponse>();
         }
     }
 }

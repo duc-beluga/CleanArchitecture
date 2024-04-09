@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Entities;
+﻿using CleanArchitecture.Application.Blog.DTOs;
+using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Commands.CreateBlog
 {
-    public class CreateBlogCommand : IRequest<BlogEntity>
+    public class CreateBlogCommand : IRequest<CreateBlogResponse>
     {
         public int Id { get; set; }
         public string Name { get; set; }
