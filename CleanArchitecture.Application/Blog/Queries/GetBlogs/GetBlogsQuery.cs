@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Entities;
+﻿using CleanArchitecture.Application.Blog.DTOs;
+using CleanArchitecture.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
 {
-    public class GetBlogsQuery : IRequest<List<BlogEntity>>
+    public class GetBlogsQuery : IRequest<List<BlogGetResponse>>
     {
     }
 }

@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Domain.Entities;
+﻿using CleanArchitecture.Application.Blog.DTOs;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interface;
+using Mapster;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
 {
-    public class GetBlogsQueryHandler : IRequestHandler<GetBlogsQuery, List<BlogEntity>>
+    public class GetBlogsQueryHandler : IRequestHandler<GetBlogsQuery, List<BlogGetResponse>>
     {
         private readonly IBlogRepository _blogRepository;
 
@@ -18,10 +20,10 @@ namespace CleanArchitecture.Application.Blog.Queries.GetBlogs
             _blogRepository = blogRepository;
         }
 
-        public async Task<List<BlogEntity>> Handle(GetBlogsQuery request, CancellationToken cancellationToken)
+        public async Task<List<BlogGetResponse>> Handle(GetBlogsQuery request, CancellationToken cancellationToken)
         {
             var blogs = await _blogRepository.GetAllSync();
-            return blogs;
+            return blogs.Adapt<List<BlogGetResponse>>();
         }
     }
 }
