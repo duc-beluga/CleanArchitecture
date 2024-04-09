@@ -36,7 +36,7 @@ namespace CleanArchitecture.API.Controllers
         public async Task<IActionResult> CreateBlog(CreateBlogCommand createBlogCommand)
         {
             var createdBlog = await _mediator.Send(createBlogCommand);
-            return CreatedAtAction(nameof(GetBlogById), new { id = createdBlog.Id }, createdBlog);
+            return CreatedAtAction(nameof(GetBlogById), new { blogId = createdBlog.Id }, createdBlog);
         }
 
         [HttpPut("{blogId}")]
