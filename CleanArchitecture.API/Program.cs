@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using CleanArchitecture.Domain.Interface;
 using CleanArchitecture.Infrastructure.Repositories;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,20 +40,23 @@ if (builder.Environment.IsProduction())
             throw new InvalidOperationException("'ProdConnection' not found")
         )
     );
+
+    builder.Services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(client.GetSecret("RedisUrl").Value.Value.ToString() ??
+        throw new InvalidOperationException("'RedisUrl' not found")));
+    builder.Services.AddScoped<IRedisCache, RedisCache>();
 }
 else if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis:RedisUrl").Value!.ToString() ??
+       throw new InvalidOperationException("'RedisUrl' not found")));
+    builder.Services.AddScoped<IRedisCache, RedisCache>();
 }
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
