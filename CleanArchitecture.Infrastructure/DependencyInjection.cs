@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Interface;
+﻿using Azure.Identity;
+using CleanArchitecture.Domain.Interface;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,14 @@ namespace CleanArchitecture.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.AddScoped<IBlogRepository, BlogRepository>();
+
+           
             services.AddDbContext<BlogDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("BlogDbConnectionString") ??
-                throw new InvalidOperationException("'BlogDbConnectionString' not found"))
+                options.UseSqlServer(configuration.GetConnectionString("BlogDbDevelopmentConnectionString") ??
+                throw new InvalidOperationException("'BlogDbDevelopmentConnectionString' not found"))
             );
 
-            services.AddScoped<IBlogRepository, BlogRepository>();
             return services;
         }
     }
