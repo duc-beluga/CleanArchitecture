@@ -53,7 +53,20 @@ else if (builder.Environment.IsDevelopment())
     builder.Services.AddScoped<IRedisCache, RedisCache>();
 }
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("reactApp", policyBuilder =>
+    {
+        policyBuilder.WithOrigins("https://cleanarchitecture-client.onrender.com");
+        policyBuilder.AllowAnyHeader();
+        policyBuilder.AllowAnyMethod();
+        policyBuilder.AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("reactApp");
 
 app.UseSwagger();
 app.UseSwaggerUI();
