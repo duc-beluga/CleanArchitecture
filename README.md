@@ -1,5 +1,5 @@
 ## Architecture:
-- Clean Architecture
+- Clean Architecture (.NET Core 8)
 ## Layers:
 - **API**: Handles HTTP requests and routes them to the Application layer.
 - **Application**: Contains application logic, command and query handlers, and DTO mappings.
