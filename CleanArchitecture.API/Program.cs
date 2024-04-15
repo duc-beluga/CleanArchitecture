@@ -23,35 +23,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
 
-if (builder.Environment.IsProduction())
-{
-    builder.Services.AddScoped<IBlogRepository, BlogRepository>();
-
-    var keyVaultURL = builder.Configuration.GetSection("KeyVault:KeyVaultURL");
-
-    var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(new AzureServiceTokenProvider().KeyVaultTokenCallback));
-
-    builder.Configuration.AddAzureKeyVault(keyVaultURL.Value!.ToString(), new DefaultKeyVaultSecretManager());
-
-    var client = new SecretClient(new Uri(keyVaultURL.Value!.ToString()), new DefaultAzureCredential());
-
-    builder.Services.AddDbContext<BlogDbContext>(options =>
-        options.UseSqlServer(client.GetSecret("ProdConnection").Value.Value.ToString() ??
-            throw new InvalidOperationException("'ProdConnection' not found")
-        )
-    );
-
-    builder.Services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(client.GetSecret("RedisUrl").Value.Value.ToString() ??
-        throw new InvalidOperationException("'RedisUrl' not found")));
-    builder.Services.AddScoped<IRedisCache, RedisCache>();
-}
-else if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddInfrastructure(builder.Configuration);
-    builder.Services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis:RedisUrl").Value!.ToString() ??
-       throw new InvalidOperationException("'RedisUrl' not found")));
-    builder.Services.AddScoped<IRedisCache, RedisCache>();
-}
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
