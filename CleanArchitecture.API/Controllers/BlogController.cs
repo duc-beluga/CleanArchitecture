@@ -2,6 +2,7 @@
 using CleanArchitecture.Application.Blog.Commands.UpdateBlog;
 using CleanArchitecture.Application.Blog.Queries.GetBlogById;
 using CleanArchitecture.Application.Blog.Queries.GetBlogs;
+using CleanArchitecture.Application.Blog.Queries.GetBlogsRedis;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,13 @@ namespace CleanArchitecture.API.Controllers
         public async Task<IActionResult> GetBlogs()
         {
             var blogs = await _mediator.Send(new GetBlogsQuery());
+            return Ok(blogs);
+        }
+
+        [HttpGet("Redis")]
+        public async Task<IActionResult> GetBlogsRedis()
+        {
+            var blogs = await _mediator.Send(new GetBlogsRedisQuery());
             return Ok(blogs);
         }
 
