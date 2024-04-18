@@ -1,16 +1,7 @@
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using CleanArchitecture.Application;
 using CleanArchitecture.Infrastructure;
 using CleanArchitecture.Infrastructure.Data;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using CleanArchitecture.Domain.Interface;
-using CleanArchitecture.Infrastructure.Repositories;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -34,10 +34,10 @@ namespace CleanArchitecture.Infrastructure
             } 
             else if (configuration["ASPNETCORE_ENVIRONMENT"] == "Development")
             {
-                SQLConnectionString = configuration.GetConnectionString("BlogDbDevelopmentConnectionString");
+                //SQLConnectionString = configuration.GetConnectionString("BlogDbDevelopmentConnectionString");
 
-                //SQLConnectionString = secretClient.GetSecret("AzureSQL-ConnectionString-Development").Value.Value.ToString();
-            }    
+                SQLConnectionString = secretClient.GetSecret("azuresql-connectionstring-development").Value.Value.ToString();
+            }
 
             services.AddDbContext<BlogDbContext>(options => options.UseSqlServer(SQLConnectionString 
                                                 ?? throw new InvalidOperationException("'BlogDbDevelopmentConnectionString' not found"))
