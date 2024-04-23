@@ -1,7 +1,6 @@
 using CleanArchitecture.Application;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Infrastructure;
-using CleanArchitecture.Infrastructure.Data;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,5 +38,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapIdentityApi<UserEntity>();    
 
 app.Run();

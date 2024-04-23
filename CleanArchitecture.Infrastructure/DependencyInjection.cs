@@ -1,5 +1,6 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Interface;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Repositories;
@@ -38,6 +39,8 @@ namespace CleanArchitecture.Infrastructure
 
                 SQLConnectionString = secretClient.GetSecret("azuresql-connectionstring-development").Value.Value.ToString();
             }
+
+            services.AddIdentityApiEndpoints<UserEntity>().AddEntityFrameworkStores<BlogDbContext>();
 
             services.AddDbContext<BlogDbContext>(options => options.UseSqlServer(SQLConnectionString 
                                                 ?? throw new InvalidOperationException("'BlogDbDevelopmentConnectionString' not found"))
